@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-ink-900 text-slate-200 antialiased;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'tnum';
+  }
+
+  /* Tabular figures everywhere numbers are compared down a column — without
+     them, prices jitter horizontally on every refresh. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    @apply bg-accent/25 text-white;
+  }
+
+  /* A visible, consistent focus ring. Keyboard users must never have to guess
+     where they are. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent/70 ring-offset-2 ring-offset-ink-900;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-ink-600;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink-600/80;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-line bg-ink-800 shadow-card;
+  }
+
+  .card-hover {
+    @apply transition-colors duration-150 hover:border-line-strong hover:bg-ink-750;
+  }
+
+  /* Small uppercase section label — the terminal-style typographic anchor used
+     throughout the app. */
+  .eyebrow {
+    @apply text-2xs font-semibold uppercase tracking-label text-slate-500;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-md border border-line px-2 py-1 text-2xs font-medium;
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden rounded bg-ink-700;
+  }
+  .skeleton::after {
+    content: '';
+    @apply absolute inset-0 -translate-x-full animate-shimmer;
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      rgba(148, 163, 184, 0.08),
+      transparent
+    );
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border text-sm font-medium
+           transition-colors duration-150 disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn border-accent/30 bg-accent/15 px-3.5 py-2 text-accent hover:bg-accent/25;
+  }
+  .btn-ghost {
+    @apply btn border-line bg-ink-750 px-3.5 py-2 text-slate-300 hover:bg-ink-700 hover:text-white;
+  }
+  .btn-sm {
+    @apply px-2.5 py-1.5 text-2xs;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-line bg-ink-850 px-3 py-2 text-sm text-slate-100
+           placeholder:text-slate-600 focus:border-accent/40;
+  }
+}
+
+@layer utilities {
+  /* Staggered list entrances. Applied via inline style on the index so cards
+     cascade rather than all appearing at once. */
+  .stagger {
+    animation-delay: calc(var(--i, 0) * 45ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
