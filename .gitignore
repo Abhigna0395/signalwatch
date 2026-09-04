@@ -30,3 +30,7 @@ dist/
 .idea/
 .DS_Store
 Thumbs.db
+
+# pytest
+backend/.pytest_cache/
+.pytest_cache/
