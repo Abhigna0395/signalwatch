@@ -19,6 +19,13 @@ services:
     startCommand: python seed.py --reset && uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
     envVars:
+      # Pinned explicitly: Render's unpinned default (3.14 at time of writing)
+      # is newer than pydantic-core's published wheels, which forces pip to
+      # compile it from source via Rust/maturin — and that fails outright on
+      # Render's read-only build filesystem. 3.12 has prebuilt wheels for
+      # every dependency here and matches local development.
+      - key: PYTHON_VERSION
+        value: "3.12.10"
       - key: DEMO_MODE
         value: "true"
       - key: DATABASE_URL
