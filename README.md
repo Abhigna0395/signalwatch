@@ -7,6 +7,14 @@
 
 An explainable smart market watchlist, built for **CODE 2026**.
 
+**🔴 Live demo:** **[signalwatch-dusky.vercel.app](https://signalwatch-dusky.vercel.app)**
+· API: [signalwatch-api-a7z9.onrender.com](https://signalwatch-api-a7z9.onrender.com)
+· [API docs](https://signalwatch-api-a7z9.onrender.com/docs)
+
+> Deployed on free tiers (Vercel + Render), running in `DEMO_MODE` with a
+> deterministic seeded market — no API keys required. The backend sleeps after
+> 15 minutes idle; the first load after that takes ~30–50s to wake up.
+
 ---
 
 ## The problem
@@ -240,24 +248,32 @@ demonstration of the core loop.
 
 ## Deployment
 
-Config is committed for a zero-config deploy — backend on **Render**, frontend
-on **Vercel**. Both need only your account; nothing here needs a paid tier or a
-secret.
+**Already live** — backend on **Render**, frontend on **Vercel**, both free
+tier:
+
+| | URL |
+|---|---|
+| App | <https://signalwatch-dusky.vercel.app> |
+| API | <https://signalwatch-api-a7z9.onrender.com> |
+| API docs | <https://signalwatch-api-a7z9.onrender.com/docs> |
+
+Config is committed for a zero-config redeploy from a fresh fork:
 
 1. **Backend** — Render dashboard → **New → Blueprint** → select this repo.
-   Render finds [`render.yaml`](render.yaml) and provisions everything:
+   Render reads [`render.yaml`](render.yaml) and provisions everything:
+   Python pinned to 3.12 (needed for prebuilt `pydantic-core` wheels),
    `DEMO_MODE=true`, SQLite, the world reseeded on every boot. Note the URL it
-   gives you (`https://signalwatch-api-xxxx.onrender.com`). Free tier sleeps
-   after 15 min idle — the first request after that takes ~30–50s to wake.
+   gives you. Free tier sleeps after 15 min idle — the first request after
+   that takes ~30–50s to wake.
 
 2. **Frontend** — Vercel dashboard → **Add New → Project** → select this repo,
    root directory `frontend`. [`vercel.json`](frontend/vercel.json) sets the
    build/output and the SPA rewrite React Router needs. Add one environment
    variable before deploying:
    ```
-   VITE_API_BASE_URL = https://signalwatch-api-xxxx.onrender.com
+   VITE_API_BASE_URL = <the Render URL from step 1>
    ```
-   (the URL from step 1). Vercel gives you the live frontend URL.
+   Vercel gives you the live frontend URL.
 
 3. **Narrow CORS** (optional, once you have the Vercel URL) — Render dashboard
    → your service → Environment → set `CORS_ORIGINS` to that exact URL instead

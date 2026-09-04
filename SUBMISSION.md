@@ -120,12 +120,16 @@ YouTube/Loom (unlisted is fine), paste the link. Suggested script:
 
 ## Demo Link
 
-This runs locally (no public deploy). Either:
-- Put your repo URL here again and rely on **Instructions to Run** below, or
-- Deploy in ~15 min: frontend → Vercel/Netlify (`frontend/`, build `npm run build`,
-  output `dist`), backend → Render/Railway (`backend/`, start
-  `uvicorn app.main:app --host 0.0.0.0 --port $PORT`), set the frontend's
-  `VITE_API_BASE_URL` to the backend URL. `DEMO_MODE=true` needs no keys.
+```
+https://signalwatch-dusky.vercel.app
+```
+
+Live on free tiers — frontend on Vercel, backend on Render, `DEMO_MODE=true`
+(deterministic seeded market, no API keys). The backend sleeps after 15 min
+idle, so the first load after a quiet period takes ~30–50s to wake up; give it
+one warm-up request before a judge opens it cold if you can.
+
+API: `https://signalwatch-api-a7z9.onrender.com` · docs: `/docs`
 
 ---
 
