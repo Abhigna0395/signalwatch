@@ -99,10 +99,17 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+_cors_origins = settings.cors_origin_list
+# The app authenticates via an X-User-Email header, never cookies or TLS
+# certs — so it carries no CORS "credentials" in the browser's sense, and a
+# wildcard origin is safe. That matters for deployment: set CORS_ORIGINS=*
+# to stand the API up before the frontend's final domain is known, then
+# narrow it once it is. allow_credentials must be False whenever origins
+# includes "*" — combining them is rejected by every browser outright.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origin_list,
-    allow_credentials=True,
+    allow_origins=_cors_origins,
+    allow_credentials="*" not in _cors_origins,
     allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )

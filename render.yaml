@@ -1,0 +1,33 @@
+# Render Blueprint for the SignalWatch API.
+#
+# Deploy: Render dashboard -> New -> Blueprint -> pick this repo. Render finds
+# this file automatically and provisions everything below with no further
+# config. Free tier: spins down after 15 min idle, so the first request after
+# a quiet period takes ~30-50s to cold-start — expected, not a bug.
+#
+# The start command reseeds the demo world on every boot. That is deliberate:
+# Render's free tier has an ephemeral filesystem (SQLite resets on redeploy
+# regardless), and reseeding guarantees every visitor sees the same populated,
+# meaningful "since your last visit" story rather than an empty watchlist.
+services:
+  - type: web
+    name: signalwatch-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: python seed.py --reset && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: DEMO_MODE
+        value: "true"
+      - key: DATABASE_URL
+        value: "sqlite:///./signalwatch.db"
+      - key: ENABLE_BACKGROUND_REFRESH
+        value: "true"
+      # Wildcard so the API works the moment it boots, before the frontend's
+      # final Vercel domain is known. Narrow this to that exact origin once
+      # you have it (Render dashboard -> service -> Environment) — see
+      # README -> Deployment.
+      - key: CORS_ORIGINS
+        value: "*"
